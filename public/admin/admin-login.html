@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZOOM - Admin Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .admin-login-container {
+      max-width: 500px;
+      margin: 100px auto;
+      padding: 2rem;
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
+      border: 1px solid var(--primary);
+    }
+    
+    .admin-login-container h2 {
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .admin-form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .admin-form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--light);
+    }
+    
+    .admin-form-group input {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      color: var(--light);
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .admin-form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    .admin-submit-btn {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: var(--primary);
+      color: var(--dark);
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .admin-submit-btn:hover {
+      background-color: var(--light);
+    }
+    
+    #error {
+      color: #ff6b6b;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    #background-image {
+      width: 100%;
+      height: auto;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="ide">
+        <div class="logo">
+            <img src="/images/logo.png" alt="ZOOM Logo">
+            <p>ZOOM_Online</p>
+        </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#products">Shop</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li class="search-container">
+                <button class="search-link" onclick="toggleSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search..."> 
+            </li>
+        </ul>
+    </nav>
+  <div class="background-container">
+    <div class="background-overlay"></div>
+    <img id="background-image" src="../images/hero-bg.jpg" alt="Fashion Background">
+  </div>
+
+  <div class="admin-login-container">
+    <h2>Admin Login</h2>
+    <form id="loginForm">
+      <div id="error"></div>
+      
+      <div class="admin-form-group">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" required>
+      </div>
+      
+      <div class="admin-form-group">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required>
+      </div>
+      
+      <button type="submit" class="admin-submit-btn">Login</button>
+    </form>
+  </div>
+
+<!-- Add this script at the bottom -->
+<script>
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorDiv = document.getElementById('error');
+    errorDiv.textContent = '';
+    
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        window.location.href = 'admin-dashboard.html';
+      } else {
+        errorDiv.textContent = data.message || 'Login failed';
+      }
+    } catch (err) {
+      errorDiv.textContent = 'Network error. Please try again.';
+    }
+  });
+</script>
+</body>
+</html>

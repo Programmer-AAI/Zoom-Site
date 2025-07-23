@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - ZOOM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #C9A227;
+            --dark: #1a1a1a;
+            --light: #ffffff;
+            --gray: #f5f5f5;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            color: var(--light);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .logo p {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .checkout-container {
+            max-width: 1200px;
+            margin: 8rem auto 3rem;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        .checkout-form-section, .checkout-summary {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .checkout-summary {
+            align-self: start;
+            position: sticky;
+            top: 120px;
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 3px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary);
+            color: var(--dark);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .place-order-btn:hover {
+            background-color: #C9A227;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .order-summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .order-summary-item span:first-child {
+            color: #b0b0b0;
+        }
+
+        .order-total {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin: 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .total-price {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        .payment-method {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-method label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .payment-method input[type="checkbox"] {
+            width: auto;
+            accent-color: var(--primary);
+        }
+
+        .product-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+                margin-top: 6rem;
+                padding: 1rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .checkout-summary {
+                position: static;
+            }
+
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="images/logo.png" alt="ZOOM Logo">
+            <p>ZOOM_Online</p>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#products">Shop</a></li>
+            <li><a href="about.html">About Us</a></li>
+        </ul>
+    </nav>
+
+    <!-- Checkout Content -->
+    <div class="checkout-container">
+        <div class="checkout-form-section">
+            <form id="checkoutForm" action="https://formspree.io/f/myzpeykd" method="POST">
+                <input type="hidden" name="_subject" value="New Order from ZOOM Store">
+                <input type="hidden" name="_replyto" id="emailReplyTo">
+                <input type="hidden" name="_next" value="https://lopcalhost/confirmation.html">
+                <input type="hidden" name="_language" value="en">
+                
+                <h2 class="section-title">Shipping Information</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="First Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="Last Name" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="Email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="Address" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="City" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="zipCode">ZIP Code</label>
+                        <input type="text" id="zipCode" name="ZIP Code" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <select id="country" name="Country" required>
+                        <option value="">Select Country</option>
+                        <option value="Bangladesh">Bangladesh</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="Phone Number" required>
+                </div>
+                
+                <h2 class="section-title">Payment Method</h2>
+                <div class="payment-method">
+                    <label>
+                        <input type="checkbox" name="Payment Method" value="Cash on Delivery" checked>
+                        Cash on Delivery
+                    </label>
+                </div>
+                
+                <button type="submit" class="place-order-btn" id="submitBtn">
+                    Place Order
+                    <span class="spinner" id="spinner"></span>
+                </button>
+            </form>
+        </div>
+        
+        <div class="checkout-summary">
+            <h2 class="section-title">Order Summary</h2>
+            <div id="order-items">
+                <!-- Order items will be dynamically inserted here -->
+            </div>
+            
+            <div class="order-total">
+                <span>Total:</span>
+                <span class="total-price">$0.00</span>
+            </div>
+        </div>
+    </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const checkoutForm = document.getElementById("checkoutForm");
+    const orderItems = document.getElementById("order-items");
+    const totalPrice = document.querySelector(".total-price");
+    const submitBtn = document.getElementById("submitBtn");
+    const spinner = document.getElementById("spinner");
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+    function renderOrderSummary() {
+        if (cart.length === 0) {
+            window.location.href = "cart.html";
+            return;
+        }
+        
+        let itemsHTML = '';
+        let total = 0;
+        
+        cart.forEach(item => {
+            const price = parseFloat(item.price.replace("$", ""));
+            const quantity = item.quantity || 1;
+            total += price * quantity;
+            
+            itemsHTML += `
+                <div class="order-summary-item">
+                    <div style="display: flex; align-items: center;">
+                        <img src="${item.image}" alt="${item.title}" class="product-image">
+                        <span>${item.title} x${quantity}</span>
+                    </div>
+                    <span>$${(price * quantity).toFixed(2)}</span>
+                </div>
+            `;
+        });
+        
+        itemsHTML += `
+            <div class="order-summary-item">
+                <span>Shipping</span>
+                <span>Free</span>
+            </div>
+        `;
+        
+        orderItems.innerHTML = itemsHTML;
+        totalPrice.textContent = `$${total.toFixed(2)}`;
+    }
+    
+    checkoutForm.addEventListener("submit", async function(e) {
+        e.preventDefault();
+        
+        // Validate email
+        const email = document.getElementById("email").value;
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert("Please enter a valid email address");
+            return false;
+        }
+        
+        // Show loading spinner
+        submitBtn.disabled = true;
+        spinner.style.display = 'inline-block';
+        
+        try {
+            // Collect form data
+            const formData = new FormData(checkoutForm);
+            
+            // Add cart items to form data
+            cart.forEach((item, index) => {
+                formData.append(`item_${index}_name`, item.title);
+                formData.append(`item_${index}_price`, item.price);
+                formData.append(`item_${index}_quantity`, item.quantity || 1);
+            });
+            
+            // Submit to Formspree
+            const response = await fetch(checkoutForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                // Clear cart
+                localStorage.removeItem("cart");
+                
+                // Store order data
+                const orderData = {
+                    orderId: 'ZOOM-' + Date.now().toString().slice(-8),
+                    items: cart,
+                    total: totalPrice.textContent,
+                    date: new Date().toLocaleString()
+                };
+                localStorage.setItem("lastOrder", JSON.stringify(orderData));
+                
+                // Redirect to confirmation page
+                window.location.href = "confirmation.html";
+            } else {
+                throw new Error('Form submission failed');
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("There was an error processing your order. Please try again.");
+        } finally {
+            submitBtn.disabled = false;
+            spinner.style.display = 'none';
+        }
+    });
+    
+    renderOrderSummary();
+});
+</script>
+</body>
+</html>
